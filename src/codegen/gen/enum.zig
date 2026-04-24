@@ -114,9 +114,9 @@ pub const ZigEnum = struct {
     ///
     /// Returns: A newly allocated string containing the Zig enum code
     pub fn createEnumDef(self: *const ZigEnum, allocator: std.mem.Allocator) ![]const u8 {
-        var buffer = try std.ArrayList(u8).initCapacity(allocator, 1024);
-        errdefer buffer.deinit(allocator);
-        var writer = buffer.writer(allocator);
+        var aw = try std.Io.Writer.Allocating.initCapacity(allocator, 1024);
+        errdefer aw.deinit();
+        const writer = &aw.writer;
 
         try writer.print("pub const {s} = enum(i32) {{\n", .{self.const_name});
 
@@ -126,7 +126,7 @@ pub const ZigEnum = struct {
         }
 
         try writer.writeAll("};\n");
-        return buffer.toOwnedSlice(allocator);
+        return aw.toOwnedSlice();
     }
 
     /// Frees all resources associated with this enum definition.

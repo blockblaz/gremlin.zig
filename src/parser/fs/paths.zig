@@ -52,9 +52,9 @@ fn matchGlob(path: []const u8, pattern: []const u8) bool {
     return pattern_idx == pattern.len and path_idx == path.len;
 }
 
-pub fn findProtoFiles(allocator: std.mem.Allocator, basePath: []const u8, ignore_masks: ?[]const []const u8) !std.ArrayList([]const u8) {
-    var dir = try std.fs.cwd().openDir(basePath, .{ .iterate = true });
-    defer dir.close();
+pub fn findProtoFiles(allocator: std.mem.Allocator, io: std.Io, basePath: []const u8, ignore_masks: ?[]const []const u8) !std.ArrayList([]const u8) {
+    var dir = try std.Io.Dir.cwd().openDir(io, basePath, .{ .iterate = true });
+    defer dir.close(io);
 
     var walker = try dir.walk(allocator);
     defer walker.deinit();
@@ -67,11 +67,13 @@ pub fn findProtoFiles(allocator: std.mem.Allocator, basePath: []const u8, ignore
         paths.deinit(allocator);
     }
 
-    while (try walker.next()) |entry| {
+    while (try walker.next(io)) |entry| {
         if (matchesAnyMask(entry.path, ignore_masks)) continue;
 
         if (entry.kind == .file and std.mem.eql(u8, std.fs.path.extension(entry.basename), ".proto")) {
-            const path = try dir.realpathAlloc(allocator, entry.path);
+            const path_z = try dir.realPathFileAlloc(io, entry.path, allocator);
+            defer allocator.free(path_z);
+            const path = try allocator.dupe(u8, path_z);
             try paths.append(allocator, path);
         }
     }
@@ -176,10 +178,11 @@ pub fn findRoot(
 }
 
 test "walk" {
-    var path_buffer: [std.fs.max_path_bytes]u8 = undefined;
-    const path = try std.fs.realpath(".", &path_buffer);
+    var path_buffer: [std.Io.Dir.max_path_bytes]u8 = undefined;
+    const n = try std.Io.Dir.cwd().realPathFile(std.testing.io, ".", &path_buffer);
+    const path = path_buffer[0..n];
 
-    var entries = try findProtoFiles(std.testing.allocator, path, null);
+    var entries = try findProtoFiles(std.testing.allocator, std.testing.io, path, null);
     defer {
         for (entries.items) |entry| {
             std.testing.allocator.free(entry);
