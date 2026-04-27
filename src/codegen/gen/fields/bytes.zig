@@ -59,7 +59,11 @@ fn formatStringLiteral(allocator: std.mem.Allocator, str: []const u8) ![]const u
             '"' => try result.appendSlice(allocator, "\\\""),
 
             // All other characters are converted to hex for consistent representation
-            else => try std.fmt.format(result.writer(allocator), "\\x{X:0>2}", .{c}),
+            else => {
+                const hex = try std.fmt.allocPrint(allocator, "\\x{X:0>2}", .{c});
+                defer allocator.free(hex);
+                try result.appendSlice(allocator, hex);
+            },
         }
     }
     try result.appendSlice(allocator, "\"");

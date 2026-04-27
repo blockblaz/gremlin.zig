@@ -57,11 +57,13 @@ fn make(step: *std.Build.Step, _: std.Build.Step.MakeOptions) !void {
     const proto_path = try ps.proto_sources.getPath3(b, step).toString(b.allocator);
     const target_path = try ps.gen_output.getPath3(b, step).toString(b.allocator);
 
-    const proto_path_resolved = try std.Build.Cache.Directory.cwd().handle.realpathAlloc(b.allocator, proto_path);
+    const io = b.graph.io;
+    const proto_path_resolved = try std.Io.Dir.cwd().realPathFileAlloc(io, proto_path, b.allocator);
     defer b.allocator.free(proto_path_resolved);
 
     generateProtobuf(
         b.allocator,
+        io,
         proto_path_resolved,
         target_path,
         ps.ignore_masks,
