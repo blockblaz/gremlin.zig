@@ -129,11 +129,11 @@ pub const FileOutput = struct {
 
         // Write content up to the last non-newline character
         if (trimmed_len > 0) {
-            try file.writeStreamingAll(io,processed.items[0..trimmed_len]);
+            try file.writeStreamingAll(io, processed.items[0..trimmed_len]);
         }
 
         // Always add exactly one newline at the end
-        try file.writeStreamingAll(io,"\n");
+        try file.writeStreamingAll(io, "\n");
 
         // Free the content buffer
         self.content.deinit(self.allocator);

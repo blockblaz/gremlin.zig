@@ -128,48 +128,48 @@ fn updateGoldenMessage(msg: *unittest.TestAllTypes, repeated_storage: []?unittes
 fn createDeepNested() benchmark.DeepNested {
     const items_level1 = [_]?benchmark.Level1{
         benchmark.Level1{
-        .id = 11,
-        .title = "item1_top_level",
-        .score = 2.34,
-        .nested = benchmark.Level2{
-            .id = 110,
-            .description = "nested_in_top_item1",
-            .payload = "some payload data",
-            .nested = benchmark.Level3{
-                .id = 1100,
-                .name = "deeply_nested_top_item1",
+            .id = 11,
+            .title = "item1_top_level",
+            .score = 2.34,
+            .nested = benchmark.Level2{
+                .id = 110,
+                .description = "nested_in_top_item1",
+                .payload = "some payload data",
+                .nested = benchmark.Level3{
+                    .id = 1100,
+                    .name = "deeply_nested_top_item1",
+                },
             },
         },
+        benchmark.Level1{
+            .id = 12,
+            .title = "item2_top_level",
+            .score = 3.45,
+            .nested = benchmark.Level2{
+                .id = 120,
+                .description = "nested_in_top_item2",
+                .payload = "more payload data here",
+            },
         },
         benchmark.Level1{
-        .id = 12,
-        .title = "item2_top_level",
-        .score = 3.45,
-        .nested = benchmark.Level2{
-            .id = 120,
-            .description = "nested_in_top_item2",
-            .payload = "more payload data here",
-        },
+            .id = 13,
+            .title = "item3_top_level",
+            .score = 4.56,
         },
         benchmark.Level1{
-        .id = 13,
-        .title = "item3_top_level",
-        .score = 4.56,
+            .id = 14,
+            .title = "item4_top_level",
+            .score = 5.67,
+            .nested = benchmark.Level2{
+                .id = 140,
+                .description = "nested_in_top_item4",
+                .payload = "final payload data",
+            },
         },
         benchmark.Level1{
-        .id = 14,
-        .title = "item4_top_level",
-        .score = 5.67,
-        .nested = benchmark.Level2{
-            .id = 140,
-            .description = "nested_in_top_item4",
-            .payload = "final payload data",
-        },
-        },
-        benchmark.Level1{
-        .id = 15,
-        .title = "item5_top_level",
-        .score = 6.78,
+            .id = 15,
+            .title = "item5_top_level",
+            .score = 6.78,
         },
     };
 
@@ -193,23 +193,23 @@ fn createDeepNested() benchmark.DeepNested {
 
     const items_level3 = [_]?benchmark.Level3{
         benchmark.Level3{
-        .id = 31,
-        .name = "item1_nested",
-        .nested = benchmark.Level4{
-            .value = 310,
-            .data = "nested_item1_data",
-            .numbers = &[_]i32{ 1, 2, 3, 4, 5 },
-        },
+            .id = 31,
+            .name = "item1_nested",
+            .nested = benchmark.Level4{
+                .value = 310,
+                .data = "nested_item1_data",
+                .numbers = &[_]i32{ 1, 2, 3, 4, 5 },
+            },
             .items = &sub_items1,
         },
         benchmark.Level3{
-        .id = 32,
-        .name = "item2_nested",
-        .nested = benchmark.Level4{
-            .value = 320,
-            .data = "nested_item2_data",
-            .numbers = &[_]i32{ 6, 7, 8, 9, 10 },
-        },
+            .id = 32,
+            .name = "item2_nested",
+            .nested = benchmark.Level4{
+                .value = 320,
+                .data = "nested_item2_data",
+                .numbers = &[_]i32{ 6, 7, 8, 9, 10 },
+            },
             .items = &sub_items2,
         },
         benchmark.Level3{
@@ -234,32 +234,32 @@ fn createDeepNested() benchmark.DeepNested {
 
     const items_level2 = [_]?benchmark.Level2{
         benchmark.Level2{
-        .id = 21,
-        .description = "item1_level2_with_payload",
-        .payload = "payload for item 1",
-        .nested = benchmark.Level3{
-            .id = 210,
-            .name = "nested_in_item1",
-            .nested = benchmark.Level4{
-                .value = 2100,
-                .data = "deep_nested",
-                .numbers = &[_]i32{ 100, 200, 300 },
+            .id = 21,
+            .description = "item1_level2_with_payload",
+            .payload = "payload for item 1",
+            .nested = benchmark.Level3{
+                .id = 210,
+                .name = "nested_in_item1",
+                .nested = benchmark.Level4{
+                    .value = 2100,
+                    .data = "deep_nested",
+                    .numbers = &[_]i32{ 100, 200, 300 },
+                },
             },
         },
+        benchmark.Level2{
+            .id = 22,
+            .description = "item2_level2_with_payload",
+            .payload = "payload for item 2 with more data",
+            .nested = benchmark.Level3{
+                .id = 220,
+                .name = "nested_in_item2",
+            },
         },
         benchmark.Level2{
-        .id = 22,
-        .description = "item2_level2_with_payload",
-        .payload = "payload for item 2 with more data",
-        .nested = benchmark.Level3{
-            .id = 220,
-            .name = "nested_in_item2",
-        },
-        },
-        benchmark.Level2{
-        .id = 23,
-        .description = "item3_level2_with_payload",
-        .payload = "payload for item 3",
+            .id = 23,
+            .description = "item3_level2_with_payload",
+            .payload = "payload for item 3",
         },
         benchmark.Level2{
             .id = 24,
